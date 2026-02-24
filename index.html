@@ -114,6 +114,83 @@
         .icon {
             margin-right: 10px;
         }
+        
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px 5px;
+            }
+            
+            .container {
+                padding: 15px 12px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 1.3em;
+                margin-bottom: 8px;
+            }
+            
+            .subtitle {
+                font-size: 0.8em;
+                margin-bottom: 15px;
+            }
+            
+            .category {
+                margin-bottom: 20px;
+            }
+            
+            .category h2 {
+                font-size: 1em;
+                margin-bottom: 12px;
+                padding-bottom: 6px;
+            }
+            
+            /* Scroll horizontal para columnas */
+            .email-list.two-columns {
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+                padding-bottom: 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .version-column {
+                min-width: 250px;
+                flex-shrink: 0;
+            }
+            
+            .column-header {
+                position: sticky;
+                top: 0;
+                background: white;
+                z-index: 1;
+                padding: 5px 0;
+                font-size: 0.85em;
+            }
+            
+            .email-item {
+                padding: 10px 12px;
+            }
+            
+            .email-item a {
+                font-size: 0.8em;
+            }
+            
+            .version-badge {
+                font-size: 0.75em;
+                padding: 4px 10px;
+            }
+            
+            .icon {
+                margin-right: 6px;
+            }
+            
+            .footer {
+                margin-top: 25px;
+                font-size: 0.7em;
+            }
+        }
     </style>
 </head>
 <body>
