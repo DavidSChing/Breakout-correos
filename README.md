@@ -1,5 +1,5 @@
 # Correos Breakout
-Plantillas de correos HTML para eventos y comunicaciones de Breakout - 2026
+Plantillas de correos HTML para eventos y comunicaciones de Breakout - 2026 
 Para una visualización en pagina web, ingresar a este link: https://davidsching.github.io/Breakout-correos/
 
 ## Autor
