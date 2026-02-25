@@ -1,6 +1,6 @@
 # 📧 Correos Breakout - Plantillas HTML 2026
 
-Sistema de gestión de plantillas de correos electrónicos para campañas de Breakout Capital y Zero to One.
+Sistema de gestión de plantillas de correos electrónicos para campañas de Breakout durante el 2026.
 
 ## 🌐 Visualización Web
 
