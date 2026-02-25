@@ -156,5 +156,74 @@
         </td>
       </tr>
     </table>
+
+    <!-- Botón para copiar código -->
+    <button id="btnCopiar" onclick="copiarCodigo(this)" style="position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+      📋 Copiar código
+    </button>
+
+    <script id="scriptCopiar">
+    function copiarCodigo(btn) {
+      // Clonar el body y eliminar elementos no deseados
+      const bodyClone = document.body.cloneNode(true);
+      
+      // Eliminar botón y script de copiar
+      const botonCopiar = bodyClone.querySelector('#btnCopiar');
+      const scriptCopiar = bodyClone.querySelector('#scriptCopiar');
+      if (botonCopiar) botonCopiar.remove();
+      if (scriptCopiar) scriptCopiar.remove();
+      
+      // Eliminar scripts inyectados por live-server y extensiones
+      const scriptsInyectados = bodyClone.querySelectorAll('script');
+      scriptsInyectados.forEach(script => {
+        if (script.textContent.includes('live-server') || 
+            script.textContent.includes('WebSocket') ||
+            script.textContent.includes('LiveReload')) {
+          script.remove();
+        }
+      });
+      
+      // Eliminar comentarios de live-server
+      const comentarios = [];
+      const walker = document.createTreeWalker(bodyClone, NodeFilter.SHOW_COMMENT);
+      let node;
+      while (node = walker.nextNode()) {
+        if (node.textContent.includes('live-server')) {
+          comentarios.push(node);
+        }
+      }
+      comentarios.forEach(c => c.remove());
+      
+      // Eliminar elementos de extensiones del navegador
+      const extensiones = bodyClone.querySelectorAll('grammarly-desktop-integration');
+      extensiones.forEach(ext => ext.remove());
+      
+      // Limpiar atributos añadidos por extensiones
+      bodyClone.removeAttribute('data-new-gr-c-s-check-loaded');
+      bodyClone.removeAttribute('data-gr-ext-installed');
+      
+      // Construir HTML limpio
+      const htmlLimpio = '<!DOCTYPE html>\n<html lang="es">\n' +
+        '  <head>\n' +
+        '    <meta charset="UTF-8" />\n' +
+        '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n' +
+        '    <title>' + document.title + '</title>\n' +
+        '  </head>\n' +
+        bodyClone.outerHTML +
+        '\n</html>';
+      
+      navigator.clipboard.writeText(htmlLimpio).then(() => {
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = '✅ ¡Copiado!';
+        btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+        setTimeout(() => {
+          btn.innerHTML = textoOriginal;
+          btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        }, 2000);
+      }).catch(err => {
+        alert('Error al copiar: ' + err);
+      });
+    }
+    </script>
   </body>
 </html>

@@ -47,3 +47,40 @@
         </div>
     </div>
 </div>
+
+<!-- Botón para copiar código (formato email HTML) -->
+<button id="btnCopiarEmail" onclick="copiarCodigoEmail()" style="position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+  📋 Copiar código
+</button>
+
+<script id="scriptCopiarEmail">
+function copiarCodigoEmail() {
+  // Obtener todo el contenido HTML del documento
+  const htmlCompleto = document.documentElement.outerHTML;
+  
+  // Buscar el inicio del código del correo (antes del botón)
+  const inicioBoton = htmlCompleto.indexOf('<!-- Botón para copiar código (formato email HTML) -->');
+  
+  // Extraer solo el contenido del correo (antes del botón)
+  let contenidoLimpio = '';
+  if (inicioBoton !== -1) {
+    // Encontrar el body
+    const inicioBody = htmlCompleto.indexOf('<body');
+    const finTagBody = htmlCompleto.indexOf('>', inicioBody) + 1;
+    contenidoLimpio = htmlCompleto.substring(finTagBody, inicioBoton).trim();
+  }
+  
+  const btn = document.getElementById('btnCopiarEmail');
+  navigator.clipboard.writeText(contenidoLimpio).then(() => {
+    const textoOriginal = btn.innerHTML;
+    btn.innerHTML = '✅ ¡Copiado!';
+    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+    setTimeout(() => {
+      btn.innerHTML = textoOriginal;
+      btn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+    }, 2000);
+  }).catch(err => {
+    alert('Error al copiar: ' + err);
+  });
+}
+</script>
