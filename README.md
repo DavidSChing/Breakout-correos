@@ -2,16 +2,16 @@
 
 Sistema de gestión de plantillas de correos electrónicos para campañas de Breakout Capital y Zero to One.
 
+## 🌐 Visualización Web
+
+Puedes ver todas las plantillas renderizadas en: **[https://davidsching.github.io/Breakout-correos/](https://davidsching.github.io/Breakout-correos/)**
+
 ## 🎯 ¿Qué es esto?
 
 Este es un repositorio centralizado que contiene todas las plantillas de correos HTML diseñadas para las campañas de comunicación de Breakout. Incluye correos para:
 - **Breakout Capital**: Invitaciones a programa de aceleración y financiamiento
 - **Zero to One**: Convocatorias para eventos y paneles
 - **Otros**: Solicitudes de apoyo y comunicaciones institucionales
-
-## 🌐 Visualización Web
-
-Puedes ver todas las plantillas renderizadas en: **[https://davidsching.github.io/Breakout-correos/](https://davidsching.github.io/Breakout-correos/)**
 
 ## 📋 Cómo usar las plantillas
 
