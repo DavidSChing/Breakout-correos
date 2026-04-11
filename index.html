@@ -42,6 +42,16 @@
         .category {
             margin-bottom: 25px;
         }
+
+        .status {
+            background: #f3f6ff;
+            border-left: 4px solid #667eea;
+            padding: 12px 14px;
+            border-radius: 8px;
+            color: #3b4b95;
+            margin-bottom: 16px;
+            font-size: 0.95em;
+        }
         
         .category h2 {
             color: #667eea;
@@ -207,101 +217,232 @@
                 Las demás versiones son para visualización web.
             </div>
         </div>
-        
-        <div class="category">
-            <h2>💼 Breakout Capital</h2>
-            <div class="email-list two-columns">
-                <div class="version-column">
-                    <div class="column-header">Versiones 1.x</div>
-                    <div class="email-item">
-                        <a href="Breakout Capital/Breakout_Capital-v1.0.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 1.0</span>
-                            <span class="version-badge">v1.0</span>
-                        </a>
-                    </div>
-                    <div class="email-item">
-                        <a href="Breakout Capital/Breakout_Capital-v1.1.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 1.1</span>
-                            <span class="version-badge">v1.1</span>
-                        </a>
-                    </div>
-                    <div class="email-item">
-                        <a href="Breakout Capital/Breakout_Capital-v1.2.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 1.2</span>
-                            <span class="version-badge">v1.2</span>
-                        </a>
-                    </div>
-                    <div class="email-item">
-                        <a href="Breakout Capital/Breakout_Capital-v1.3.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 1.3 (correct format)</span>
-                            <span class="version-badge">v1.3</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="version-column">
-                    <div class="column-header">Versiones 2.x</div>
-                    <div class="email-item">
-                        <a href="Breakout Capital/Breakout_Capital-v2.0.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 2.0</span>
-                            <span class="version-badge">v2.0</span>
-                        </a>
-                    </div>
-                    <div class="email-item">
-                        <a href="Breakout Capital/Breakout_Capital-v2.1.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 2.1</span>
-                            <span class="version-badge">v2.1</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="category">
-            <h2>🚀 Zero to One - Hult Prize x Breakout</h2>
-            <div class="email-list two-columns">
-                <div class="version-column">
-                    <div class="column-header">Versiones 1.x</div>
-                    <div class="email-item">
-                        <a href="Zero to One - Hult Prize x Breakout/Zero_to_One-v1.0.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 1.0 (correct format)</span>
-                            <span class="version-badge">v1.0</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="version-column">
-                    <div class="column-header">Versiones 2.x</div>
-                    <div class="email-item">
-                        <a href="Zero to One - Hult Prize x Breakout/Zero_to_One-v2.0.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 2.0</span>
-                            <span class="version-badge">v2.0</span>
-                        </a>
-                    </div>
-                    <div class="email-item">
-                        <a href="Zero to One - Hult Prize x Breakout/Zero_to_One-v2.1.html" target="_blank">
-                            <span><span class="icon">📄</span>Versión 2.1 (correct format)</span>
-                            <span class="version-badge">v2.1</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="category">
-            <h2>📬 Otros Correos</h2>
-            <div class="email-list">
-                <div class="email-item">
-                    <a href="Correo_solicitud-apoyo.html" target="_blank">
-                        <span><span class="icon">📄</span>Solicitud de Apoyo</span>
-                        <span class="version-badge">v1.0</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+
+        <div id="status" class="status">Cargando correos de forma automática...</div>
+        <div id="categories-root"></div>
         
         <div class="footer">
             <p>Breakout © 2026 | Plantillas de correos HTML</p>
             <p>Haz clic en cualquier correo para ver la versión completa renderizada</p>
         </div>
     </div>
+
+    <script>
+        const VERSION_REGEX = /[-_ ]v(\d+(?:\.\d+)?)/i;
+
+        function getVersionInfo(path) {
+            const fileName = path.split('/').pop();
+            const match = fileName.match(VERSION_REGEX);
+            if (!match) {
+                return { major: 0, raw: 'v1.0', label: fileName.replace('.html', '') };
+            }
+
+            const raw = `v${match[1]}`;
+            const major = parseInt(match[1].split('.')[0], 10) || 0;
+            return {
+                major,
+                raw,
+                label: `Version ${match[1]}`
+            };
+        }
+
+        function byVersion(a, b) {
+            if (a.version.major !== b.version.major) {
+                return a.version.major - b.version.major;
+            }
+
+            const aParts = a.version.raw.slice(1).split('.').map(Number);
+            const bParts = b.version.raw.slice(1).split('.').map(Number);
+            const len = Math.max(aParts.length, bParts.length);
+            for (let i = 0; i < len; i += 1) {
+                const diff = (aParts[i] || 0) - (bParts[i] || 0);
+                if (diff !== 0) {
+                    return diff;
+                }
+            }
+            return a.path.localeCompare(b.path);
+        }
+
+        function titleFromFolder(folder) {
+            return folder;
+        }
+
+        function inferRepoFromPagesUrl() {
+            const host = window.location.hostname;
+            const pathname = window.location.pathname;
+            const parts = pathname.split('/').filter(Boolean);
+
+            if (!host.endsWith('github.io') || parts.length === 0) {
+                return null;
+            }
+
+            const owner = host.split('.')[0];
+            const repo = parts[0];
+            if (!owner || !repo) {
+                return null;
+            }
+
+            return { owner, repo };
+        }
+
+        async function getDefaultBranch(owner, repo) {
+            const url = `https://api.github.com/repos/${owner}/${repo}`;
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'application/vnd.github+json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`No se pudo leer la rama por defecto (${response.status}).`);
+            }
+
+            const data = await response.json();
+            return data.default_branch;
+        }
+
+        async function fetchTree(owner, repo) {
+            let branches = ['main', 'master'];
+            let lastError = null;
+
+            try {
+                const defaultBranch = await getDefaultBranch(owner, repo);
+                if (defaultBranch) {
+                    branches = [defaultBranch, ...branches.filter((b) => b !== defaultBranch)];
+                }
+            } catch (error) {
+                lastError = error;
+            }
+
+            for (const branch of branches) {
+                const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`;
+                try {
+                    const response = await fetch(url, {
+                        headers: {
+                            'Accept': 'application/vnd.github+json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        lastError = new Error(`GitHub API ${response.status}`);
+                        continue;
+                    }
+
+                    const data = await response.json();
+                    if (Array.isArray(data.tree)) {
+                        return data.tree;
+                    }
+                } catch (error) {
+                    lastError = error;
+                }
+            }
+
+            throw lastError || new Error('No se pudo obtener el arbol del repositorio.');
+        }
+
+        function render(categories) {
+            const root = document.getElementById('categories-root');
+            root.innerHTML = '';
+
+            const folderNames = Object.keys(categories).sort((a, b) => a.localeCompare(b));
+            folderNames.forEach((folder) => {
+                const category = document.createElement('div');
+                category.className = 'category';
+
+                const heading = document.createElement('h2');
+                heading.textContent = folder === '__root__' ? '📬 Otros Correos' : `📧 ${titleFromFolder(folder)}`;
+                category.appendChild(heading);
+
+                const versionsByMajor = new Map();
+                categories[folder].sort(byVersion).forEach((item) => {
+                    const major = item.version.major;
+                    if (!versionsByMajor.has(major)) {
+                        versionsByMajor.set(major, []);
+                    }
+                    versionsByMajor.get(major).push(item);
+                });
+
+                const majors = Array.from(versionsByMajor.keys()).sort((a, b) => a - b);
+                const twoColumns = majors.length > 1;
+                const list = document.createElement('div');
+                list.className = `email-list${twoColumns ? ' two-columns' : ''}`;
+
+                majors.forEach((major) => {
+                    const column = document.createElement('div');
+                    column.className = 'version-column';
+
+                    const columnHeader = document.createElement('div');
+                    columnHeader.className = 'column-header';
+                    columnHeader.textContent = major > 0 ? `Versiones ${major}.x` : 'Versiones';
+                    column.appendChild(columnHeader);
+
+                    versionsByMajor.get(major).forEach((item) => {
+                        const emailItem = document.createElement('div');
+                        emailItem.className = 'email-item';
+
+                        const link = document.createElement('a');
+                        link.href = item.path;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
+
+                        const left = document.createElement('span');
+                        left.innerHTML = `<span class="icon">📄</span>${item.version.label}`;
+
+                        const right = document.createElement('span');
+                        right.className = 'version-badge';
+                        right.textContent = item.version.raw;
+
+                        link.appendChild(left);
+                        link.appendChild(right);
+                        emailItem.appendChild(link);
+                        column.appendChild(emailItem);
+                    });
+
+                    list.appendChild(column);
+                });
+
+                category.appendChild(list);
+                root.appendChild(category);
+            });
+        }
+
+        async function init() {
+            const statusEl = document.getElementById('status');
+            const repoInfo = inferRepoFromPagesUrl();
+
+            if (!repoInfo) {
+                statusEl.textContent = 'No se pudo detectar el repositorio desde la URL. Abre esta pagina desde GitHub Pages.';
+                return;
+            }
+
+            try {
+                const tree = await fetchTree(repoInfo.owner, repoInfo.repo);
+                const htmlFiles = tree
+                    .filter((entry) => entry.type === 'blob' && entry.path.toLowerCase().endsWith('.html'))
+                    .map((entry) => entry.path)
+                    .filter((path) => path.toLowerCase() !== 'index.html');
+
+                const categories = {};
+                htmlFiles.forEach((path) => {
+                    const folder = path.includes('/') ? path.split('/')[0] : '__root__';
+                    if (!categories[folder]) {
+                        categories[folder] = [];
+                    }
+                    categories[folder].push({
+                        path,
+                        version: getVersionInfo(path)
+                    });
+                });
+
+                render(categories);
+                statusEl.textContent = `Se detectaron ${htmlFiles.length} correos automaticamente.`;
+            } catch (error) {
+                console.error(error);
+                statusEl.textContent = 'No se pudieron cargar los correos automaticamente. Verifica que el repositorio sea publico y que GitHub API este disponible.';
+            }
+        }
+
+        init();
+    </script>
 </body>
 </html>
